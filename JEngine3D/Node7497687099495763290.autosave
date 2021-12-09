@@ -1,0 +1,129 @@
+  class Node extends Dot {
+
+    Vec3 dir = new Vec3(0, 0, 0);
+    
+    Node( float x, float y, float z, float size, int[] col ) {
+      super( x, y, z, size, col );
+    }
+
+    Node( float x, float y, float z, float size, float x_dir, float y_dir, float z_dir, int[] col ) {
+      super( x, y, z, size, col );
+      this.dir = new Vec3( x_dir, y_dir, z_dir );
+    }
+    
+    void move() {
+      this.position.x += this.dir.x;
+      this.position.y += this.dir.y;
+      this.position.z += this.dir.z;
+
+      float friction = 0.9995;
+      this.dir.x *= friction;
+      this.dir.y *= friction;
+      this.dir.z *= friction;
+    }
+
+    float distance_to( Node other ) {
+      double xd = Math.abs( this.position.x - other.position.x );
+      double yd = Math.abs( this.position.y - other.position.y );
+      double zd = Math.abs( this.position.z - other.position.z );
+      return (float) Math.sqrt( xd*xd + yd*yd + zd*zd );
+    }
+
+    float distance_to( Attractor attractor ) {
+      double xd = Math.abs( this.position.x - attractor.position.x );
+      double yd = Math.abs( this.position.y - attractor.position.y );
+      double zd = Math.abs( this.position.z - attractor.position.z );
+      return (float) Math.sqrt( xd*xd + yd*yd + zd*zd );
+    }
+
+    Attractor ClosestAttractor( ArrayList<Attractor> attractors ) {
+      for ( Attractor attractor : attractors ) {
+
+        
+
+      }
+    }
+
+    float Speed() {
+      return (float) Math.sqrt( this.dir.x*this.dir.x + this.dir.y*this.dir.y + this.dir.z*this.dir.z );
+    }
+
+    void attract_attractor( Attractor other ) {
+      float r = distance_to( other );
+      if ( r > 3 ) {
+
+        float G = 0.4;
+        float F = G / ( r * r );
+
+        // Position difference
+        float xdir = other.position.x - this.position.x;
+        float ydir = other.position.y - this.position.y;
+        float zdir = other.position.z - this.position.z;
+
+        // Normalize
+        float len = (float) Math.sqrt( xdir*xdir + ydir*ydir + zdir*zdir );
+        xdir /= len;
+        ydir /= len;
+        zdir /= len;
+
+        this.dir.x += xdir * F;
+        this.dir.y += ydir * F;
+        this.dir.z += zdir * F;
+
+      } else {
+        float friction = 0.9925;
+        this.dir.x *= friction;
+        this.dir.y *= friction;
+        this.dir.z *= friction;
+      }
+    }
+
+    void attract_node( Node other ) {
+      float r = distance_to( other );
+      if ( r > 8 ) {
+
+        float G = 0.0025;
+        float F = G / ( r * r );
+
+        float xdir = other.position.x - this.position.x;
+        float ydir = other.position.y - this.position.y;
+        float zdir = other.position.z - this.position.z;
+
+        float len = (float) Math.sqrt( xdir*xdir + ydir*ydir + zdir*zdir );
+
+        xdir /= len;
+        ydir /= len;
+        zdir /= len;
+
+        this.dir.x += xdir * F;
+        this.dir.y += ydir * F;
+        this.dir.z += zdir * F;
+        
+      } else {
+
+        float G = 0.075;
+        float F = G / ( r * r );
+
+        float xdir = this.position.x - other.position.x;
+        float ydir = this.position.y - other.position.y;
+        float zdir = this.position.z - other.position.z;
+
+        float len = (float) Math.sqrt( xdir*xdir + ydir*ydir + zdir*zdir );
+
+        xdir /= len;
+        ydir /= len;
+        zdir /= len;
+
+        float friction = 0.9995;
+        this.dir.x += xdir * F * friction;
+        this.dir.y += ydir * F * friction;
+        this.dir.z += zdir * F * friction;
+
+      }
+    }
+
+    void render( float x, float y, float z ) {
+      super.render( x, y, z );
+    }
+
+}
