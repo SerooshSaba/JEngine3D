@@ -8,7 +8,7 @@ This is a passion project i worked on in the summer of 2021. It's a small 3D eng
 datastructures for representing 3D objects. Processing was used to create a window and to render primitive graphics
 elements.
 
-###Functions
+### Functions
 
 - Camera moves in 3D space
 - Load .obj models
